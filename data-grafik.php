@@ -135,7 +135,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="copyright">
-                                    <p>Copyright © 2021 <strong>Yori Skuy</strong>. All rights reserved.</p>
+                                <p>Copyright © 2022 <strong>Hendy S</strong>. All rights reserved.</p>
                                 </div>
                             </div>
                         </div>
@@ -166,7 +166,7 @@
                     '#483D8B',
                 ],
                 hoverBackgroundColor: [
-                  "rgba(0, 123, 255,0.9)",
+                    "rgba(255, 123, 0, 0.9)",
                 ]
               },
               {
@@ -178,7 +178,7 @@
                     '#228B32',
                 ],
                 hoverBackgroundColor: [
-                  "rgba(0, 123, 255,0.5)",
+                  "rgba(0, 123, 255, 0.9)",
                 ]
     
               },
@@ -191,7 +191,7 @@
                     '#FF4500',
                 ],
                 hoverBackgroundColor: [
-                  "rgba(0, 123, 255,0.5)",
+                  "rgba(0, 255, 123, 0.9)",
                 ]
     
               },
@@ -223,7 +223,18 @@
             data: {
               datasets: [{
                 data: [
-                    <?php echo $count_pie_data_netral ?>, <?php echo $count_pie_data_negatif ?>, <?php echo $count_pie_data_positif ?>
+                    <?php 
+                        $pembulatan = $persen_netral;
+                        echo round($pembulatan,2);  
+                    ?>,
+                    <?php 
+                        $pembulatan = $persen_negatif;
+                        echo round($pembulatan,2); 
+                    ?>, 
+                    <?php 
+                        $pembulatan = $persen_positif;
+                        echo round($pembulatan,2); 
+                    ?>
                     ],
                 backgroundColor: [
                     '#483D8B',
@@ -231,9 +242,9 @@
                     '#FF4500',
                 ],
                 hoverBackgroundColor: [
-                  "rgba(0, 123, 255,0.9)",
-                  "rgba(0, 123, 255,0.5)",
-                  "rgba(0, 123, 255,0.5)",
+                  "rgba(255, 123, 0, 0.9)",
+                  "rgba(0, 123, 255, 0.9)",
+                  "rgba(0, 255, 123, 0.9)",
                 ]
     
               }],

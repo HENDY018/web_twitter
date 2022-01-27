@@ -127,14 +127,14 @@
                     <div class="row">
                             <div class="col-md-12">
                                 <!-- DATA TABLE -->
-                                <h2 class="title-4">Selamat datang,</h3>
+                                <h2 class="title-4">Selamat Datang,</h3>
                                 <h1 class="title-2 m-b-45"><strong><?php echo"Admin" ?></strong></h3>
                                 <div class="table-data__tool">
                                     <div class="table-data__tool-left">
 
                                         <div class="rs-select2--light rs-select2--xsm">
                                             <button class="au-btn-filter"><i class="zmdi zmdi-filter-list"></i>
-                                                <?php echo"$day"; ?></button>
+                                                <?php echo "$day"; ?></button>
                                             <div class="dropDownSelect2"></div>
                                         </div>
                                             
@@ -150,42 +150,93 @@
                                     </div>
                                 </div>
 
-                                
+                                <!-- SEARCHING -->            
+                                <form action="index.php" method="get">
+                                    <label>Cari :</label>
+                                    <input type="text" name="keyword" size="30" 
+                                    placeholder="  ketik yang mau dicari.." autocomplete="off">
+                                    <button type="submit" name="cari">Cari!</button>
+                                </form>
+                                <br>
+
+                                <?php 
+                                if(isset($_GET['cari'])){
+                                    $data = cari($_GET['keyword']);
+                                }
+                                ?>
+
+                                <table border="1">
+                                    <?php 
+                                    if(isset($_GET['cari'])){
+                                        $cari = $_GET['cari'];
+                                        $data = mysqli_query($koneksi, "SELECT * FROM twitter_analisa WHERE user LIKE '%$cari%'");				
+                                    }
+                                    else{
+                                        $data = mysqli_query($koneksi, "SELECT * from twitter_analisa");		
+                                    }
+                                    $no = 1;
+                                    while($connect = mysqli_fetch_array($data)){
+                                    ?>
+                                    <?php } ?>
+                                </table>
+   
+                                <!-- TABEL DATA -->
                                 <div class="table-responsive table-responsive-data2">
-                                    <table class="table table-data2 ">
+                                    <table class="table table-data2">
                                         <thead>
                                             <tr>
                                                 <th>No</th>
                                                 <th>User</th>
                                                 <th style="padding-left:0">Tanggal</th>
-                                                <th>Polarity</th>
                                                 <th>Isi</th>
                                                 <th>Label</th>
+                                                <th>Polarity</th>
                                                 <th></th>
                                             </tr>
                                         </thead>
                                 <?php
-                                    $no = 1;
-                                    $data = mysqli_query ($koneksi, "SELECT user, created_at, stop_removal, label, polarity FROM twitter_analisa LIMIT 50;");
-                                    while ($row = mysqli_fetch_array ($data))
-                                    { ?>
-                                            <tbody>
-                                                <tr class="tr-shadow">
-                                                    <td><?php echo $no++; ?></td>
-                                                    <td>
-                                                        <span class="block-email"><?php echo $row['user']; ?></span>
-                                                    </td>
-                                                    <td style="padding:0 0 0 4px" class="desc"><?php echo $row['created_at']; ?></td>
-                                                    <td><?php echo $row['polarity']; ?></td>
-                                                    <td><?php echo $row['stop_removal']; ?></td>
-                                                    <td>
-                                                        <span class="status--process"><?php echo $row['label']; ?></span>
-                                                    </td>
-                                                </tr>
-                                                <tr class="spacer"></tr>
-                                            </tbody>
-                                <?php }  ?>
+
+                                // <!-- PAGINATION --!>
+
+                                    $halaman = 75;
+                                    $page = isset($_GET['halaman'])?(int)$_GET['halaman'] : 1;
+                                    $mulai = ($page>1) ? ($page * $halaman) - $halaman : 0;
+
+                                    $previous = $halaman - 1;
+                                    $next = $halaman + 1;
+
+                                    $sql = mysqli_query($koneksi,"SELECT user, created_at, stop_removal, label, polarity FROM twitter_analisa");
+                                    $total = mysqli_num_rows($sql);
+                                    $pages = ceil($total / $halaman);
+                                    $query = mysqli_query($koneksi,"SELECT user, created_at, stop_removal, label, polarity FROM twitter_analisa LIMIT $mulai, $halaman") or die(mysqli_error);
+                                    $no = $mulai+1;
+
+                                    while($row = mysqli_fetch_array($query)) {
+                                ?>
+                                    <tbody>
+                                        <tr class="tr-shadow">
+                                            <td><?php echo $no++; ?></td>
+                                            <td><?php echo $row['user']; ?></td>
+                                            <td style="padding:0 0 0 4px" class="desc"><?php echo $row['created_at']; ?></td>
+                                            <td><?php echo $row['stop_removal']; ?></td>
+                                            <td><?php echo $row['label']; ?></td>
+                                            <td><?php echo $row['polarity']; ?></td>
+                                        </tr>
+                                        <tr class="spacer"></tr>
+                                    </tbody>
+                                <?php 
+                                
+                                }  
+                                
+                                ?>
                                     </table>
+                                    <div class="">
+                                        <?php for ($i=1; $i<=$pages ; $i++){ ?>
+                                        <a href="?halaman=<?php echo $i; ?>"><?php echo $i; ?></a>
+                                        
+                                        <?php } ?>
+                                        
+                                    </div>
                                 </div>
                                 <!-- END DATA TABLE -->
                             </div>
@@ -193,7 +244,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="copyright">
-                                    <p>Copyright © 2021 <strong>Yori Skuy</strong>. All rights reserved.</p>
+                                    <p>Copyright © 2022 <strong>Hendy S</strong>. All rights reserved.</p>
                                 </div>
                             </div>
                         </div>
